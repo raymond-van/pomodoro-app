@@ -77,6 +77,7 @@ class App extends Component {
   }
 
   tick() {
+    this.secondsRemaining--
     var min = Math.floor(this.secondsRemaining / 60);
     var sec = this.secondsRemaining - (min * 60);
     this.setState({
@@ -96,7 +97,6 @@ class App extends Component {
     if (min === 0 & sec === 0) {
       clearInterval(this.intervalHandle);
     }
-    this.secondsRemaining--
   }
 
   render() {
