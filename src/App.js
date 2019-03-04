@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
-
+import sound from './bell.mp3'
 class TimerInput extends React.Component {
   render() {
     return (
@@ -84,6 +83,32 @@ class Logs extends React.Component {
   }
 }
 
+class Sound extends React.Component {
+  render() {
+    return (
+      <div>
+        {(this.props.playSound === true && this.props.soundControl === true) ? (
+          <audio type="audio/mp3" ref="audio_tag" src={sound} autoPlay>
+          No audio
+          </audio>
+        ) : (
+          null
+        )}
+      </div>
+    );
+  }
+}
+
+class SoundButton extends React.Component { 
+  render() {
+    return (
+      <label>Sound
+        <input type="checkbox" onClick={this.props.handleSound}></input>
+      </label>
+    );
+  }
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -101,12 +126,15 @@ class App extends Component {
       times: [],
       timesLabels: [],
       cycle: 0,
+      playSound: false,
+      soundControl: false,
     };
     this.secondsRemaining = 0; 
     this.breakRemaining = 0;
     this.intervalHandle = null;
     this.handleChange = this.handleChange.bind(this);
     this.handleBreak = this.handleBreak.bind(this);
+    this.handleSound = this.handleSound.bind(this);
     this.startCountdown = this.startCountdown.bind(this);
     this.tick = this.tick.bind(this);
   }
@@ -122,6 +150,12 @@ class App extends Component {
     this.setState({
       breakMinutes: e.target.value,
       breakInterval: e.target.value
+    })
+  }
+
+  handleSound() {
+    this.setState({
+      soundControl: !this.state.soundControl
     })
   }
 
@@ -151,6 +185,7 @@ class App extends Component {
           timesLabels: timesLb,
           control: 'Pause',
           initiated: true,
+          playSound: false,
         });
       }
       this.intervalHandle = setInterval(this.tick, 1000);
@@ -208,6 +243,7 @@ class App extends Component {
           times: timesArr,
           timesLabels: timesLb,
           control: 'Pause Break',
+          playSound: false,
         });
       }
       let time = this.state.breakMinutes;
@@ -281,6 +317,7 @@ class App extends Component {
           break: false,
           reset: true,
           cycle: this.state.cycle + 1,
+          playSound: true,
         })
       }
     } else {
@@ -315,7 +352,8 @@ class App extends Component {
           minutes: this.state.interval,
           seconds: '00',
           control: 'Start Break',
-          break: true
+          break: true,
+          playSound: true,
         })
       }
     }
@@ -329,6 +367,8 @@ class App extends Component {
         <Timer minutes={this.state.minutes} seconds={this.state.seconds} break={this.state.break} breakMinutes={this.state.breakMinutes} breakSeconds={this.state.breakSeconds}/>
         <StartButton startCountdown={this.startCountdown} control={this.state.control}/>
         <Logs cycle={this.state.cycle} times={this.state.times} timesLabels={this.state.timesLabels} />
+        <Sound playSound={this.state.playSound} soundControl={this.state.soundControl}/>
+        <SoundButton handleSound={this.handleSound}/>
       </div>
     );
   }
