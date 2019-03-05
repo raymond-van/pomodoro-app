@@ -127,7 +127,6 @@ class App extends Component {
       break: false,
       control: 'Start',
       initiated: false,
-      reset: false,
       times: [],
       timesLabels: [],
       cycle: 0,
@@ -166,10 +165,11 @@ class App extends Component {
 
   startCountdown() {
     if (this.state.control === 'Start' || this.state.control === 'Resume' ) {
-      var dateObj = new Date();
-      dateObj = dateObj.toLocaleTimeString();
+      this.intervalHandle = setInterval(this.tick, 1000);
       let time = this.state.minutes;
       this.secondsRemaining = time * 60 + parseInt(this.state.seconds);
+      var dateObj = new Date();
+      dateObj = dateObj.toLocaleTimeString();
       if (this.state.control === 'Resume') {
         var timesArr = this.state.times;
         timesArr[this.state.cycle].push(dateObj);
@@ -193,15 +193,14 @@ class App extends Component {
           playSound: false,
         });
       }
-      this.intervalHandle = setInterval(this.tick, 1000);
     }
 
     if (this.state.control === 'Pause') {  
-      dateObj = new Date();
-      dateObj = dateObj.toLocaleTimeString();   
       clearInterval(this.intervalHandle); 
       var min = Math.floor(this.secondsRemaining / 60);
       var sec = this.secondsRemaining - (min * 60);
+      dateObj = new Date();
+      dateObj = dateObj.toLocaleTimeString();   
       timesArr = this.state.times;
       timesArr[this.state.cycle].push(dateObj);
       timesLb = this.state.timesLabels;
@@ -227,9 +226,11 @@ class App extends Component {
     }
 
     if (this.state.control === 'Start Break' || this.state.control === 'Resume Break') {
+      this.intervalHandle = setInterval(this.tick, 1000);
+      let time = this.state.breakMinutes;
+      this.breakRemaining = time * 60 + parseInt(this.state.breakSeconds);
       dateObj = new Date();
       dateObj = dateObj.toLocaleTimeString();  
-      this.intervalHandle = setInterval(this.tick, 1000);
       if (this.state.control === 'Resume Break') {
         timesArr = this.state.times;
         timesArr[this.state.cycle].push(dateObj);
@@ -251,16 +252,14 @@ class App extends Component {
           playSound: false,
         });
       }
-      let time = this.state.breakMinutes;
-      this.breakRemaining = time * 60 + parseInt(this.state.breakSeconds);
     }
 
     if (this.state.control === 'Pause Break') {
-      dateObj = new Date();
-      dateObj = dateObj.toLocaleTimeString();  
       clearInterval(this.intervalHandle); 
       var bMin = Math.floor(this.breakRemaining / 60);
       var bSec = this.breakRemaining - (bMin * 60);
+      dateObj = new Date();
+      dateObj = dateObj.toLocaleTimeString();  
       timesArr = this.state.times;
       timesArr[this.state.cycle].push(dateObj);
       timesLb = this.state.timesLabels;
@@ -320,7 +319,6 @@ class App extends Component {
           breakSeconds: '00',
           control: 'Start',
           break: false,
-          reset: true,
           cycle: this.state.cycle + 1,
           playSound: true,
         })
@@ -373,7 +371,6 @@ class App extends Component {
         <CtrlButton startCountdown={this.startCountdown} control={this.state.control}/>
         <Logs cycle={this.state.cycle} times={this.state.times} timesLabels={this.state.timesLabels} />
         <Sound playSound={this.state.playSound} soundControl={this.state.soundControl}/>
-        {/* <SoundButton handleSound={this.handleSound}/> */}
       </div>
     );
   }
