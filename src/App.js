@@ -1,118 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import sound from './bell.mp3';
-
-class TimerInput extends React.Component {
-  render() {
-    return (
-      <div className="set-work-container">
-        <div className="set-work">
-          <h3>set your <span>Work</span> interval<span className='col'>:</span></h3>
-          {this.props.initiated === true ? (
-            <input className='input-num' type="number" value={this.props.interval} step="5" min="0" required />
-          ) : (
-            <input className='input-num' type="number" value={this.props.interval} step="5" min="0" onChange={this.props.handleChange} required />
-          )}
-        </div>
-      </div>
-    );
-  }
-}
-
-class BreakInput extends React.Component {
-  render() {
-    return (
-      <div className="set-break-container">
-        <SoundButton handleSound={this.props.handleSound}/>
-        <div className="set-break">
-          <h3>set your <span>Break</span> interval<span className='col'>:</span></h3>
-            <input className='input-num' type="number" value={this.props.breakInterval} step="5" min="0" onChange={this.props.handleBreak} required />
-        </div>
-      </div>
-    );
-  }
-}
-
-
-class Timer extends Component {
-  render() {
-    return (
-      <div className='timer'>
-        {this.props.break === true ? (
-          document.title = this.props.breakMinutes + ':' + this.props.breakSeconds + ' | Pomodoro',
-          <h1>{this.props.breakMinutes}:{this.props.breakSeconds}</h1>
-        ) : (
-          document.title = this.props.minutes + ':' + this.props.seconds + ' | Pomodoro',
-          <h1>{this.props.minutes}:{this.props.seconds}</h1>
-        )}
-      </div>
-    );
-  }
-}
-
-class CtrlButton extends React.Component {
-  render() {
-    return (
-      <div className='ctrl-button-container'>
-        <button className='ctrl-button' onClick={this.props.startCountdown}>{this.props.control}</button>
-      </div>
-    );
-  }
-}
-
-class Logs extends React.Component {
-  createLog = () => {
-    let log = [];
-    let arr = [];
-    for (var i = 0; i < this.props.times.length; i++) {
-      log.push(<h3>Interval {i + 1}</h3>);
-      var time = this.props.times[i];
-      var timeLabel = this.props.timesLabels[i];
-      log.push(<span>{timeLabel[0]}</span>)
-      log.push(<span>{time[0]}</span>)
-      for (var j = 1; j < time.length; j++) {
-        log.push(<span className='gt'>&nbsp;&nbsp;&nbsp;>>&nbsp;&nbsp;&nbsp;</span>)
-        log.push(<span>{timeLabel[j]}</span>)
-        log.push(<span>{time[j]}</span>)
-      };
-      log.push(<div></div>);
-      arr.push(log);
-      log = [];
-    };
-    return arr;
-  }
-  render() {
-    return (
-      <div className='logs'>
-        {this.props.times.length > 0 ? this.createLog() : null}
-      </div>
-    );
-  }
-}
-
-class Sound extends React.Component {
-  render() {
-    return (
-      <div>
-        {(this.props.playSound === true && this.props.soundControl === true) ? (
-          <audio type="audio/mp3" ref="audio_tag" src={sound} autoPlay>
-          No audio
-          </audio>
-        ) : (
-          null
-        )}
-      </div>
-    );
-  }
-}
-
-class SoundButton extends React.Component { 
-  render() {
-    return (
-      <input className='sound-button' type="checkbox" onClick={this.props.handleSound}></input>
-    );
-  }
-}
+import TimerInput from './components/TimerInput';
+import BreakInput from './components/BreakInput';
+import Timer from './components/Timer';
+import CtrlButton from './components/CtrlButton';
+import Logs from './components/Logs';
+import Sound from './components/Sound';
 
 class App extends Component {
   constructor(props) {
@@ -369,7 +262,7 @@ class App extends Component {
         <BreakInput breakInterval={this.state.breakInterval} handleBreak={this.handleBreak} handleSound={this.handleSound}/>
         <Timer minutes={this.state.minutes} seconds={this.state.seconds} break={this.state.break} breakMinutes={this.state.breakMinutes} breakSeconds={this.state.breakSeconds}/>
         <CtrlButton startCountdown={this.startCountdown} control={this.state.control}/>
-        <Logs cycle={this.state.cycle} times={this.state.times} timesLabels={this.state.timesLabels} />
+        <Logs cycle={this.state.cycle} times={this.state.times} timesLabels={this.state.timesLabels}/>
         <Sound playSound={this.state.playSound} soundControl={this.state.soundControl}/>
       </div>
     );
@@ -377,4 +270,3 @@ class App extends Component {
 }
 
 export default App;
-
