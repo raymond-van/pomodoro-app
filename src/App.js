@@ -12,11 +12,11 @@ class App extends Component {
     super(props);
     this.state = {
       seconds: '00',
-      minutes: '1',
-      interval: '1',
+      minutes: '50',
+      interval: '50',
       breakSeconds: '00',
-      breakMinutes: '2',
-      breakInterval: '2',
+      breakMinutes: '10',
+      breakInterval: '10',
       break: false,
       control: 'Start',
       initiated: false,
