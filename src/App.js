@@ -77,7 +77,7 @@ class App extends Component {
         timesArr = this.state.times;
         timesArr.push([dateObj]);
         timesLb = this.state.timesLabels;
-        timesLb.push(['Started ']);
+        timesLb.push(['Started work ']);
         this.setState({
           times: timesArr,
           timesLabels: timesLb,
